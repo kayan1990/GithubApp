@@ -1,0 +1,157 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'com.google.devtools.ksp'
+}
+
+android {
+    namespace 'com.kayan.githubapp'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.kayan.githubapp"
+        minSdk 24
+        targetSdk 34
+        versionCode 4
+        versionName "0.0.4"
+
+        testInstrumentationRunner "com.equationl.githubapp.CustomTestRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        buildConfigField "String", "CLIENT_ID", properties.getProperty("CLIENT_ID")
+        buildConfigField "String", "CLIENT_SECRET", properties.getProperty("CLIENT_SECRET")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.11'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += '/META-INF/LICENSE-notice.md'
+            excludes += '/META-INF/LICENSE.md'
+
+        }
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation platform('androidx.compose:compose-bom:2024.04.00')
+    implementation "androidx.compose.ui:ui"
+    implementation 'androidx.compose.material3:material3'
+    implementation "androidx.compose.ui:ui-tooling"
+    implementation "androidx.compose.material:material-icons-extended"
+    implementation 'androidx.activity:activity-compose:1.8.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.navigation:navigation-compose:2.7.7"
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation "androidx.datastore:datastore-core:1.0.0"
+    implementation "androidx.paging:paging-runtime-ktx:3.2.1"
+    implementation "androidx.paging:paging-compose:3.2.1"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+
+
+    // implementation "androidx.glance:glance-appwidget:1.0.0-alpha05"
+    implementation "com.google.dagger:hilt-android:2.51.1"
+    kapt "com.google.dagger:hilt-compiler:2.51.1"
+    implementation "androidx.hilt:hilt-navigation-compose:1.2.0"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
+
+    implementation "io.coil-kt:coil-compose:2.6.0"
+    implementation "io.coil-kt:coil-svg:2.6.0"
+    implementation "io.coil-kt:coil-gif:2.6.0"
+
+    implementation "org.commonmark:commonmark:0.21.0"
+    implementation "org.commonmark:commonmark-ext-gfm-tables:0.21.0"
+    implementation "org.commonmark:commonmark-ext-gfm-strikethrough:0.21.0"
+    implementation "org.commonmark:commonmark-ext-autolink:0.21.0"
+    implementation fileTree(dir: 'libs', include: ["richtext-commonmark-release.aar", "richtext-ui-material3-release.aar", "richtext-ui-release.aar"])
+
+    implementation "com.vladsch.flexmark:flexmark-html2md-converter:0.64.8"
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.retrofit2:converter-scalars:2.9.0"
+    implementation("com.squareup.retrofit2:converter-simplexml:2.9.0") {
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+    }
+    // implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+    implementation "com.airbnb.android:lottie-compose:6.0.0"
+    implementation "io.github.vanpra.compose-material-dialogs:core:0.9.0"
+    //implementation "io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc"
+    //implementation "io.github.vanpra.compose-material-dialogs:color:0.8.1-rc"
+
+    implementation 'com.github.ireward:compose-html:1.0.2'
+
+    // see: https://developer.android.com/studio/write/java8-support#library-desugaring
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation("androidx.test.ext:junit:1.1.5")
+
+    // Coroutine Testing
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // Mockk for mocking dependencies
+    testImplementation("io.mockk:mockk:1.13.7")
+
+    // Turbine for Flow testing
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+
+    // Retrofit for API mocking (if needed)
+    testImplementation("com.squareup.retrofit2:retrofit:2.9.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
+
+    // AndroidX Core Testing
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.3.0"
+    androidTestImplementation "androidx.compose.ui:ui-test-manifest:1.3.0"
+    androidTestImplementation "androidx.activity:activity-compose:1.6.0"
+    androidTestImplementation "androidx.navigation:navigation-testing:2.5.0"
+    androidTestImplementation "org.junit.jupiter:junit-jupiter-api:5.7.2"
+    androidTestImplementation "org.mockito:mockito-inline:4.3.1"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:2.51.1"
+
+    debugImplementation "androidx.compose.ui:ui-tooling"
+}
+
+kapt {
+    correctErrorTypes true
+}
